@@ -9,12 +9,6 @@ var _config;
 var dbRootDir='./node_modules/elliptical-scaffold/templates/dashboard';
 
 tasks.dbCrudController=function(config,params){
-    //$Class$
-    //$ClassInstance$
-    //$ClassLabel$
-    //$ClassPlural$
-    //$icon$
-    //rename controller
     var className=params.class;
     var icon=params.icon;
     var classInstance=getClassInstance(className);
