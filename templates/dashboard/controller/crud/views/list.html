@@ -1,0 +1,39 @@
+<section class="full-white">
+    {>"shared.md-bar" barUrl="/$Class$/List/1" barNewUrl="/$Class$/Create/New" barNewTitle="New $Class$" barTitle="$Class$" barIcon="$icon$"  /}
+
+    <md-layout ea-bind="list" service="$Class$" label="$Class$" item-selector="grid-item" detail-action="/$Class$/Detail/[id]">
+        <side-panel>
+
+            {>"shared.nav-list" navIcon="$icon$" navNewUrl="/$Class$/Create/New" /}
+
+        </side-panel>
+        <main-panel>
+            <md-grid class="" service="Sort" refresh-url="/$Class$/List/1" columns="4" breakpoint="900" alt-background="odd">
+                <header>
+                    <column-header empty></column-header>
+                    <column-header field="Id" sort="true">Id</column-header>
+                    <column-header field="Name">Name</column-header>
+                    <column-header field="Date" sort="true">Created</column-header>
+                </header>
+                <section>
+                    {#enumerable}
+                    <grid-item data-id="{id}" data-header="Select:">
+                        <md-checkbox md-id="cb{$idx}" data-id="{id}"></md-checkbox>
+                    </grid-item>
+                    <grid-item data-id="{id}" data-header="Code:"><a href="/$Class$/Detail/{id}" class="indigo">{id}</a></grid-item>
+                    <grid-item data-id="{id}" data-header="Name:">
+                      {name}
+                    </grid-item>
+                    <grid-item data-id="{id}" data-header="Created">{@formatDate value="{Date}" /}</grid-item>
+                    {/enumerable}
+                </section>
+                <footer class="{@count value="{count}"  minLength="10" content="hide" /}">
+                    {>"shared.grid-pagination"/}
+                </footer>
+            </md-grid>
+            {^enumerable}
+            <p style="padding:1em;">There are no promotions/discounts available...</p>
+            {/enumerable}
+        </main-panel>
+    </md-layout>
+</section>

@@ -1,0 +1,21 @@
+<section class="full-white">
+    {>"shared.md-bar" barUrl="/$Class$/List/1" barNewTitle="Create $Class$" barTitle="$ClassPlural$" barIcon="$icon$" barNewUrl="/$Class$/Create/New"  /}
+    <md-layout ea-bind="list" service="$Class$" label="$Class$" item-selector="li" detail-action="/$Class$/Detail/[id]">
+        <side-panel>
+            {>"shared.nav-list" navIcon="person" navNewUrl="/$Class$/Create/New" /}
+        </side-panel>
+        <main-panel>
+            <md-list>
+                {#enumerable}
+                    <li data-id="{id}">
+                        <flex-box>
+                            <md-checkbox data-id="{id}"></md-checkbox>
+                        </flex-box>
+                        <a></a>
+                        <a></a>
+                    </li>
+                {/enumerable}
+            </md-list>
+        </main-panel>
+    </md-layout>
+</section>

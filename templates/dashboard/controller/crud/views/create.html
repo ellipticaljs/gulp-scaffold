@@ -1,0 +1,32 @@
+<section class="full-white">
+    <md-bar>
+        <side-panel>
+
+        </side-panel>
+        <main-panel>
+            <h3>Create $Class$</h3>
+        </main-panel>
+    </md-bar>
+    <md-layout>
+        <side-panel class="border-right">
+            <nav-list>
+                <menu-item>
+                    <span class="icon-$icon$ header primary accent"></span>
+                    <span></span>
+                </menu-item>
+                <menu-item>
+                    <span class="icon-search main icon"></span>
+                    <a href="/$Class$/List/1">$ClassPlural$</a>
+                </menu-item>
+            </nav-list>
+        </side-panel>
+        <main-panel class="padding" scroll>
+                <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Created">
+                    <form role="form" method="post" name="$Class$" location-service="Location" redirect-previous-location="true">
+                        <md-input icon="edit" prefix="prefix" type="text" required placeholder="Name" data-id="name" data-name="name"></md-input>
+                        <md-submit class="primary margin-top two" raised="true">Save</md-submit>
+                    </form>
+                </silicon-form>
+        </main-panel>
+    </md-layout>
+</section>

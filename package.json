@@ -1,0 +1,21 @@
+{
+  "name": "elliptical-scaffold",
+  "description": "Gulp scaffolding tasks",
+  "version": "1.0.0",
+  "author": {
+    "name": "S. Francis"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ellipticaljs/scaffold.git"
+  },
+  "dependencies": {
+    "fs-extra": "^0.8.1",
+    "gulp": "^3.6.0",
+    "gulp-tap": "^0.1.1",
+    "gulp-replace": "^0.5.4",
+    "minimist": "^1.2.0",
+    "gulp-rename": "^1.2.2"
+  }
+}
