@@ -39,9 +39,9 @@ export default class Controller extends elliptical.Controller {
     async Detail(req, res, next) {
         var id = req.params.id;
         Progress.start();
+        Morph.toggle();
         try {
             let entity = await $Class$.getAsync({id});
-            Morph.toggle();
             let context = {entity};
             res.render(context);
         } catch (err) {
