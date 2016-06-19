@@ -24,8 +24,8 @@
         </side-panel>
         <main-panel class="padding" scroll>
               {#entity}
-                <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Updated">
-                    <form role="form" method="put" name="$Class$" location-service="Location" redirect-previous-location="true">
+                <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Updated"  location-service="Location" redirect-previous-location="true">
+                    <form role="form" method="put" name="$Class$">
                         <input type="hidden" name="id" value="{id}">
 
                         <md-input icon="edit" prefix="prefix" type="text" required placeholder="Name" data-id="name" data-name="name" data-value="{name}"></md-input>
