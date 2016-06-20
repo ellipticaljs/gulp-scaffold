@@ -17,6 +17,7 @@ export default class Controller extends elliptical.Controller {
         let rawUrl = req.url;
         let pageSize = PAGE_SIZE;
         Progress.start();
+        Morph.reset();
         try {
             label += Label.get(req.query);
             let result = await $ClassInstance$.paginate({baseUrl, rawUrl, page, pageSize})
@@ -24,8 +25,7 @@ export default class Controller extends elliptical.Controller {
                 .orderBy(req.query.$orderBy)
                 .orderByDesc(req.query.$orderByDesc)
                 .getAsync();
-
-            Morph.reset();
+            
             let enumerable = result.data;
             let pagination = result.pagination;
             let count = pagination.count;
