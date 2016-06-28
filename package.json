@@ -1,7 +1,7 @@
 {
   "name": "elliptical-scaffold",
   "description": "Gulp scaffolding tasks",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "S. Francis"
   },

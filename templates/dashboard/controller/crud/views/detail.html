@@ -8,12 +8,18 @@
         </main-panel>
     </md-bar>
     <md-layout>
-        <side-panel class="border-right">
+        <side-panel class="border-right" label="$Class$" service="$Class$" ea-bind="detail">
             <nav-list>
                 <menu-item>
                     <span class="icon-$icon$ header primary accent"></span>
                     <span></span>
                 </menu-item>
+                {#entity}
+                    <menu-item action="delete" data-id="{id}">
+                        <span class="icon-delete main icon"></span>
+                        <span>Delete</span>
+                    </menu-item>
+                {/entity}
                 <menu-item>
                     <a href="/$Class$/List/1" class="flex-box align-center">
                         <span class="icon-search main icon"></span>
@@ -23,19 +29,19 @@
             </nav-list>
         </side-panel>
         <main-panel class="padding" scroll>
-              {#entity}
-                <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Updated"  location-service="Location" redirect-previous-location="true">
+            {#entity}
+                <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Updated" location-service="Location" redirect-previous-location="true">
                     <form role="form" method="put" name="$Class$">
                         <input type="hidden" name="id" value="{id}">
 
-                        <md-input icon="edit" prefix="prefix" type="text" required placeholder="Name" data-id="name" data-name="name" data-value="{name}"></md-input>
+                        <md-input icon="edit" prefix="prefix" type="text" required placeholder="Name" data-id="name" data-name="name"></md-input>
                         <md-submit class="primary margin-top two" raised="true">Submit</md-submit>
                     </form>
                 </silicon-form>
-               {/entity}
-               {^entity}
-                    <p style="padding:1em;">There is no record currently associated with the requested id...</p>
-               {/entity}
+            {/entity}
+            {^entity}
+                <p style="padding:1em;">There is no record currently associated with the requested id...</p>
+            {/entity}
         </main-panel>
     </md-layout>
 </section>

@@ -7,6 +7,7 @@ var gulp=require('gulp'),
 var tasks={};
 var _config;
 var dbRootDir='./node_modules/elliptical-scaffold/templates/dashboard';
+var webRootDir='./node_modules/elliptical-scaffold/templates/web';
 
 tasks.dbCrudController=function(config,params){
     var className=params.class;
@@ -80,6 +81,12 @@ tasks.dbProvider=function(config,params){
     dbCreateProvider(config,provider,camelCaseName);
 };
 
+tasks.webCreateComponent=function(config,params){
+    var dir=params.dir;
+    var tag=params.tag;
+    var upperTag=tag.toUpperCase();
+    webCreateComponent(config,dir,tag,upperTag);
+};
 
 ///private -------------------------------------------------------------------------------------------------------------
 function getClassInstance(className){
@@ -254,6 +261,20 @@ function dbCreateProvider(config,provider,camelCaseName){
 }
 
 
+function webCreateComponent(config,dir,tag,upperTag){
+    gulp.src(webRootDir + '/polymer-component/**/*.*')
+        .pipe(replace('$tag$', tag))
+        .pipe(replace('$tag-upper$', upperTag))
+        .pipe(rename({
+            dirname: tag
+        }))
+        .pipe(rename(function(path){
+            if(path.basename==='polymer-component'){
+                path.basename=tag;
+            }
+        }))
+        .pipe(gulp.dest(dir));
+}
 
 
 
@@ -262,7 +283,7 @@ function dbCreateProvider(config,provider,camelCaseName){
 module.exports=function Tasks(config){
     this.config=config;
     _config=config;
-    
+
     this.dbCreateCrudController=function(config,params){
         tasks.dbCrudController(config,params);
     }
@@ -292,6 +313,9 @@ module.exports=function Tasks(config){
     }
     this.dbCreateProvider=function(config,params){
         tasks.dbProvider(config,params);
+    }
+    this.webCreateComponent=function(config,params){
+        tasks.webCreateComponent(config,params);
     }
 };
 
