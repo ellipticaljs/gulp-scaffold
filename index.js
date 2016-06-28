@@ -32,7 +32,6 @@ tasks.dbContentController=function(config,params){
 };
 
 tasks.dbEmptyView=function(config,params){
-
     var folder=params.folder.toLowerCase();
     var name=params.name.toLowerCase();
     dbCreateEmptyView(config,folder,name)
@@ -60,6 +59,15 @@ tasks.dbContentView=function(config,params){
     var folder=params.folder.toLowerCase();
     var name=params.name.toLowerCase();
     dbCreateContentView(config,folder,name)
+};
+
+tasks.dbDetailView=function(config,params){
+    var folder=params.folder.toLowerCase();
+    var name=params.name.toLowerCase();
+    var className=params.class;
+    var icon=params.icon;
+    var classPlural=getClassPlural(className);
+    dbCreateDetailView(config,folder,name,className,classPlural,icon);
 };
 
 tasks.dbBinding=function(config,params){
@@ -234,6 +242,16 @@ function dbCreateContentView(config,folder,name){
         .pipe(gulp.dest(viewsRoot + '/' + folder.toLowerCase()));
 }
 
+function dbCreateDetailView(config,folder,name,className,classPlural,icon){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(dbRootDir + '/view/detail.html')
+        .pipe(replace('$Class$', className))
+        .pipe(replace('$ClassPlural$', classPlural))
+        .pipe(replace('$icon$', icon))
+        .pipe(rename(name.toLowerCase() + '.html'))
+        .pipe(gulp.dest(viewsRoot + '/' + folder.toLowerCase()));
+}
+
 function dbCreateBinding(config,name,camelCaseName){
     var bindingsRoot=getAppBindingsRoot(config);
     gulp.src(dbRootDir + '/binding/binding.js')
@@ -305,6 +323,9 @@ module.exports=function Tasks(config){
     this.dbCreateGridView=function(config,params){
         tasks.dbGridView(config,params);
     }
+    this.dbCreateDetailView=function(config,params){
+        tasks.dbDetailView(config,params);
+    }
     this.dbCreateBinding=function(config,params){
         tasks.dbBinding(config,params);
     }
@@ -318,26 +339,6 @@ module.exports=function Tasks(config){
         tasks.webCreateComponent(config,params);
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
