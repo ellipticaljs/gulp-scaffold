@@ -1,0 +1,16 @@
+<section class="content">
+    {#entity}
+    <silicon-form class="md form-width" service="$Class$" notify-service="Notify" success-message="$Class$ Updated" location-service="Location" redirect-previous-location="true">
+        <form role="form" method="put" name="$Class$">
+            <input type="hidden" name="id" value="{id}">
+
+            <md-input icon="edit" prefix="prefix" type="text" required placeholder="Name" data-id="name" data-name="name"></md-input>
+            <md-submit class="primary margin-top two" raised="true">Submit</md-submit>
+        </form>
+    </silicon-form>
+    {/entity}
+    {^entity}
+    <p style="padding:1em;">There is no record currently associated with the requested id...</p>
+    {/entity}
+
+</section>

@@ -1,0 +1,21 @@
+<section class="content">
+    <flex-grid service="Sort" refresh="/$Class/List/1">
+        <header>
+            <column-header field="Id" sort="true">Id</column-header>
+            <column-header field="Name" sort="true">Name</column-header>
+            <column-header field="Field1" sort="true">Field1</column-header>
+            <column-header field="Date" sort="true">Date</column-header>
+        </header>
+        <section>
+            {#enumerable}
+            <grid-item><a class="primary" href="/$Class$/Detail/{id}">{id}</a></grid-item>
+            <grid-item>{name}</grid-item>
+            <grid-item>{field1}</grid-item>
+            <grid-item>{@formatDate value="{date}" /}</grid-item>
+            {/enumerable}
+        </section>
+        <footer>
+            {>"shared.grid-pagination"/}
+        </footer>
+    </flex-grid>
+</section>

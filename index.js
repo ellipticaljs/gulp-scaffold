@@ -1,5 +1,6 @@
 
 var gulp=require('gulp'),
+    fs=require('fs'),
     replace = require('gulp-replace'),
     rename=require('gulp-rename');
 
@@ -7,8 +8,11 @@ var gulp=require('gulp'),
 var tasks={};
 var _config;
 var dbRootDir='./node_modules/elliptical-scaffold/templates/dashboard';
+var appRootDir='./node_modules/elliptical-scaffold/templates/app';
 var webRootDir='./node_modules/elliptical-scaffold/templates/web';
+var appScaffoldRootDir='./node_modules/elliptical-scaffold/templates/app/scaffold';
 
+///dashboard-----------------------------------------------------------------------------------------------------------
 tasks.dbCrudController=function(config,params){
     var className=params.class;
     var icon=params.icon;
@@ -88,6 +92,79 @@ tasks.dbProvider=function(config,params){
     var camelCaseName=toCamelCase(provider);
     dbCreateProvider(config,provider,camelCaseName);
 };
+
+
+/// app ----------------------------------------------------------------------------------------------------------------
+tasks.appCrudController=function(config,params){
+    var className=params.class;
+    var icon=params.icon;
+    var classInstance=getClassInstance(className);
+    var classLabel=getClassLabel(className);
+    var classPlural=getClassPlural(className);
+    appCreateCrudController(config,className,classInstance,classLabel,icon);
+    appCreateCrudControllerViews(config,className,classPlural,icon);
+};
+
+tasks.appEmptyController=function(config,params){
+    var className=params.name;
+    appCreateEmptyController(config,className);
+    appCreateEmptyControllerView(config,className);
+};
+
+tasks.appEmptyView=function(config,params){
+    var folder=params.folder.toLowerCase();
+    var name=params.name.toLowerCase();
+    appCreateEmptyView(config,folder,name)
+};
+
+tasks.appListView=function(config,params){
+    var folder=params.folder.toLowerCase();
+    var name=params.name.toLowerCase();
+    var className=params.class;
+    var icon=params.icon;
+    var classPlural=getClassPlural(className);
+    appCreateListView(config,folder,name,className,classPlural,icon);
+};
+
+tasks.appDetailView=function(config,params){
+    var folder=params.folder.toLowerCase();
+    var name=params.name.toLowerCase();
+    var className=params.class;
+    var icon=params.icon;
+    var classPlural=getClassPlural(className);
+    appCreateDetailView(config,folder,name,className,classPlural,icon);
+};
+
+tasks.appBinding=function(config,params){
+    var name=params.name.toLowerCase();
+    var camelCaseName=dashToCamelCase(name) + 'Binding';
+    appCreateBinding(config,name,camelCaseName);
+};
+
+tasks.appService=function(config,params){
+    var classProvider=params.class + 'Provider';
+    var service=params.class + 'Service';
+    var camelCaseName=toCamelCase(service);
+    appCreateService(config,service,classProvider,camelCaseName);
+};
+
+tasks.appProvider=function(config,params){
+    var provider=params.class + 'Provider';
+    var camelCaseName=toCamelCase(provider);
+    appCreateProvider(config,provider,camelCaseName);
+};
+
+tasks.appScaffold=function(config){
+    var appDir=config.appScriptPath;
+    var appFile=appDir + '/app.js';
+    fs.stat(appFile, function(err, stat) {
+        if(err == null) console.log('app has already been scaffolded...');
+        else appScaffold(appDir);
+    });
+
+}
+
+// web component -------------------------------------------------------------------------------------------------------
 
 tasks.webCreateComponent=function(config,params){
     var dir=params.dir;
@@ -279,6 +356,98 @@ function dbCreateProvider(config,provider,camelCaseName){
 }
 
 
+function appCreateCrudController(config,className,classInstance,classLabel,icon){
+    var ctrlRoot=getAppControllerRoot(config);
+    var ctrl=getControllerName(className);
+    gulp.src(appRootDir + '/controller/crud/controller/entityController.js')
+        .pipe(replace('$Class$', className))
+        .pipe(replace('$ClassInstance$', classInstance))
+        .pipe(replace('$ClassLabel$', classLabel))
+        .pipe(rename(ctrl + '.js'))
+        .pipe(gulp.dest(ctrlRoot));
+}
+
+function appCreateCrudControllerViews(config,className,classPlural,icon){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(appRootDir + '/controller/crud/views/**/*.html')
+        .pipe(replace('$Class$', className))
+        .pipe(replace('$ClassPlural$', classPlural))
+        .pipe(replace('$icon$', icon))
+        .pipe(gulp.dest(viewsRoot + '/' + className.toLowerCase()));
+}
+
+function appCreateEmptyController(config,className){
+    var ctrlRoot=getAppControllerRoot(config);
+    var ctrl=getControllerName(className);
+    gulp.src(appRootDir + '/controller/empty/controller/emptyController.js')
+        .pipe(rename(ctrl + '.js'))
+        .pipe(gulp.dest(ctrlRoot));
+}
+
+function appCreateEmptyControllerView(config,className){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(appRootDir + '/controller/empty/views/**/*.html')
+        .pipe(gulp.dest(viewsRoot + '/' + className.toLowerCase()));
+}
+
+function appCreateEmptyView(config,folder,name){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(appRootDir + '/view/empty.html')
+        .pipe(rename(name.toLowerCase() + '.html'))
+        .pipe(gulp.dest(viewsRoot + '/' + folder.toLowerCase()));
+}
+
+function appCreateListView(config,folder,name,className,classPlural,icon){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(appRootDir + '/view/list.html')
+        .pipe(replace('$Class$', className))
+        .pipe(replace('$ClassPlural$', classPlural))
+        .pipe(replace('$icon$', icon))
+        .pipe(rename(name.toLowerCase() + '.html'))
+        .pipe(gulp.dest(viewsRoot + '/' + folder.toLowerCase()));
+}
+
+function appCreateDetailView(config,folder,name,className,classPlural,icon){
+    var viewsRoot=getAppViewsRoot(config);
+    gulp.src(appRootDir + '/view/detail.html')
+        .pipe(replace('$Class$', className))
+        .pipe(replace('$ClassPlural$', classPlural))
+        .pipe(replace('$icon$', icon))
+        .pipe(rename(name.toLowerCase() + '.html'))
+        .pipe(gulp.dest(viewsRoot + '/' + folder.toLowerCase()));
+}
+
+function appCreateBinding(config,name,camelCaseName){
+    var bindingsRoot=getAppBindingsRoot(config);
+    gulp.src(appRootDir + '/binding/binding.js')
+        .pipe(replace('$binding$', name))
+        .pipe(rename(camelCaseName + '.js'))
+        .pipe(gulp.dest(bindingsRoot));
+
+}
+
+function appCreateService(config,service,classProvider,camelCaseName){
+    var servicesRoot=getAppServicesRoot(config);
+    gulp.src(appRootDir + '/service/service.js')
+        .pipe(replace('$Service$', service))
+        .pipe(replace('$ClassProvider$', classProvider))
+        .pipe(rename(camelCaseName + '.js'))
+        .pipe(gulp.dest(servicesRoot));
+}
+
+function appCreateProvider(config,provider,camelCaseName){
+    var providersRoot=getAppProvidersRoot(config);
+    gulp.src(appRootDir + '/provider/provider.js')
+        .pipe(replace('$Provider$', provider))
+        .pipe(rename(camelCaseName + '.js'))
+        .pipe(gulp.dest(providersRoot));
+}
+
+function appScaffold(appDir){
+    gulp.src(appScaffoldRootDir + '/**/*.*')
+        .pipe(gulp.dest(appDir));
+}
+
 function webCreateComponent(config,dir,tag,upperTag){
     gulp.src(webRootDir + '/polymer-component/**/*.*')
         .pipe(replace('$tag$', tag))
@@ -304,41 +473,67 @@ module.exports=function Tasks(config){
 
     this.dbCreateCrudController=function(config,params){
         tasks.dbCrudController(config,params);
-    }
+    };
     this.dbCreateEmptyController=function(config,params){
         tasks.dbEmptyController(config,params);
-    }
+    };
     this.dbCreateContentController=function(config,params){
         tasks.dbContentController(config,params);
-    }
+    };
     this.dbCreateEmptyView=function(config,params){
         tasks.dbEmptyView(config,params);
-    }
+    };
     this.dbCreateContentView=function(config,params){
         tasks.dbContentView(config,params);
-    }
+    };
     this.dbCreateListView=function(config,params){
         tasks.dbListView(config,params);
-    }
+    };
     this.dbCreateGridView=function(config,params){
         tasks.dbGridView(config,params);
-    }
+    };
     this.dbCreateDetailView=function(config,params){
         tasks.dbDetailView(config,params);
-    }
+    };
     this.dbCreateBinding=function(config,params){
         tasks.dbBinding(config,params);
-    }
+    };
     this.dbCreateService=function(config,params){
         tasks.dbService(config,params);
-    }
+    };
     this.dbCreateProvider=function(config,params){
         tasks.dbProvider(config,params);
-    }
+    };
+    this.appCreateCrudController=function(config,params){
+        tasks.appCrudController(config,params);
+    };
+    this.appCreateEmptyController=function(config,params){
+        tasks.appEmptyController(config,params);
+    };
+    this.appCreateEmptyView=function(config,params){
+        tasks.appEmptyView(config,params);
+    };
+    this.appCreateListView=function(config,params){
+        tasks.appListView(config,params);
+    };
+    this.appCreateDetailView=function(config,params){
+        tasks.appDetailView(config,params);
+    };
+    this.appCreateBinding=function(config,params){
+        tasks.appBinding(config,params);
+    };
+    this.appCreateService=function(config,params){
+        tasks.appService(config,params);
+    };
+    this.appCreateProvider=function(config,params){
+        tasks.appProvider(config,params);
+    };
+    this.appScaffold=function(config){
+        tasks.appScaffold(config);
+    };
     this.webCreateComponent=function(config,params){
         tasks.webCreateComponent(config,params);
-    }
+    };
 };
-
 
 
