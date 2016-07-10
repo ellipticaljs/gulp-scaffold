@@ -1,7 +1,7 @@
 
 import elliptical from './references/elliptical';
 import startup from './startup';
-
+import {progress} from './modules/ui';
 
 //create the app
 var app = elliptical();
@@ -32,6 +32,12 @@ app.configure(function () {
 
 //bind startup
 startup(app);
+
+//global View onBeforeRender callback
+app.onBeforeRender = function (req, res, context, callback) {
+    progress.end();
+    callback(context);
+};
 
 
 /* listen */

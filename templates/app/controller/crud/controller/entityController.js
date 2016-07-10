@@ -1,7 +1,7 @@
 import elliptical from '../references/elliptical';
 import container from '../dependencies/container';
 import keys from '../references/keys';
-import {Progress, Morph, Label} from '../modules/ui';
+import {progress} from '../modules/ui';
 
 
 var PAGE_SIZE = keys.GRID_SIZE;
@@ -10,16 +10,13 @@ var $Class$ = container.getType('$Class$');
 
 export default class Controller extends elliptical.Controller {
     async List(req, res, next) {
-        let label = "$ClassLabel$";
         let $ClassInstance$ = new $Class$();
         let page = req.params.id;
         let baseUrl = '/$Class$/List';
         let rawUrl = req.url;
         let pageSize = PAGE_SIZE;
-        Progress.start();
-        Morph.reset();
+        progress.start();
         try {
-            label += Label.get(req.query);
             let result = await $ClassInstance$.paginate({baseUrl, rawUrl, page, pageSize})
                 .filter(req.query)
                 .orderBy(req.query.$orderBy)
@@ -29,7 +26,7 @@ export default class Controller extends elliptical.Controller {
             let enumerable = result.data;
             let pagination = result.pagination;
             let count = pagination.count;
-            let context = {enumerable, pagination, count, label};
+            let context = {enumerable, pagination, count};
             res.render(context);
         } catch (err) {
             next(err);
@@ -38,8 +35,7 @@ export default class Controller extends elliptical.Controller {
 
     async Detail(req, res, next) {
         var id = req.params.id;
-        Progress.start();
-        Morph.toggle();
+        progress.start();
         try {
             let entity = await $Class$.getAsync({id});
             let context = {entity};
@@ -50,7 +46,6 @@ export default class Controller extends elliptical.Controller {
     }
 
     Create(req, res, next) {
-        Morph.toggle();
         res.render();
     }
 }
