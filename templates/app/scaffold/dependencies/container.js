@@ -3,7 +3,6 @@ import elliptical from '../references/elliptical';
 
 var container=elliptical.container;
 
-var http = elliptical.http;
 var Service = elliptical.Service;
 var Location = elliptical.Location;
 var $Cookie = elliptical.$Cookie;
@@ -12,17 +11,18 @@ var $Sort = elliptical.$Sort;
 var DomEvent = elliptical.DomEvent;
 var $Rest = elliptical.$Rest;
 
+var apiProtocol=location.protocol.replace(':', '');
+var apiHost=location.hostname;
+var apiPort=location.port;
+var apiPath='/api';
 
 //set Rest endpoint props
-$Rest.protocol = 'http';
-$Rest.host = '';
-$Rest.path = '/api';
-$Rest.port = 80;
+$Rest.protocol = apiProtocol;
+$Rest.host = apiHost;
+$Rest.path = apiPath;
+$Rest.port = apiPort;
 
 var $rest = new $Rest();
-
-
-
 
 //registrations
 container.mapType('Service', Service, $rest);
