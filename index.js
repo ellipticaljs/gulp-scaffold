@@ -11,6 +11,8 @@ var dbRootDir='./node_modules/elliptical-scaffold/templates/dashboard';
 var appRootDir='./node_modules/elliptical-scaffold/templates/app';
 var webRootDir='./node_modules/elliptical-scaffold/templates/web';
 var appScaffoldRootDir='./node_modules/elliptical-scaffold/templates/app/scaffold';
+var pageScaffoldRootDir='./node_modules/elliptical-scaffold/templates/page/app';
+var pageScaffoldRootImagesDir='./node_modules/elliptical-scaffold/templates/page/images/page';
 
 ///dashboard-----------------------------------------------------------------------------------------------------------
 tasks.dbCrudController=function(config,params){
@@ -158,11 +160,54 @@ tasks.appScaffold=function(config){
     var appDir=config.appScriptPath;
     var appFile=appDir + '/app.js';
     fs.stat(appFile, function(err, stat) {
-        if(err == null) console.log('app has already been scaffolded...');
+        if(err == null) console.log('an app has already been scaffolded...');
         else appScaffold(appDir);
     });
 
-}
+};
+
+// page -------------------------------------------------------------------------------------------------------
+
+tasks.pageScaffold=function(config,params){
+    var appDir=config.appScriptPath;
+    var appFile=appDir + '/app.js';
+    var imgDir=params.imageDir + '/page';
+    fs.stat(appFile, function(err, stat) {
+        if(err === null) console.log('an app has already been scaffolded...');
+        else {
+            pageScaffold(appDir);
+            pageMoveImages(imgDir);
+        }
+    });
+};
+
+tasks.pagePartialScaffold=function(config,params){
+    var imageDirectory='./images';
+    if(params.imageDir !==undefined) imageDirectory=params.imageDir;
+    var appDir=config.appScriptPath;
+    var controllerDir=appDir + '/controllers';
+    var dependenciesDir=appDir + '/dependencies';
+    var sharedViewsDir=appDir + '/views/shared/page';
+    var appFile=appDir + '/app.js';
+    var imgDir=imageDirectory + '/page';
+    fs.stat(appFile, function(err, stat) {
+        if(err !== null) console.log('adding page to an app requires an app to be already installed...');
+        else {
+            pageMoveController(controllerDir);
+            pageMoveDependency(dependenciesDir);
+            pageMoveSharedTemplates(sharedViewsDir);
+            pageMoveImages(imgDir);
+        }
+    });
+};
+
+tasks.pageCreateTemplate=function(config,params){
+    var appDir=config.appScriptPath;
+    var sharedViewsDir=appDir + '/views/shared/page';
+    var name=params.name.toLowerCase();
+    pageCreateEmptyTemplate(sharedViewsDir,name);
+};
+
 
 // web component -------------------------------------------------------------------------------------------------------
 
@@ -448,6 +493,7 @@ function appScaffold(appDir){
         .pipe(gulp.dest(appDir));
 }
 
+
 function webCreateComponent(config,dir,tag,upperTag){
     gulp.src(webRootDir + '/polymer-component/**/*.*')
         .pipe(replace('$tag$', tag))
@@ -463,7 +509,36 @@ function webCreateComponent(config,dir,tag,upperTag){
         .pipe(gulp.dest(dir));
 }
 
+function pageScaffold(appDir){
+    gulp.src(pageScaffoldRootDir + '/**/*.*')
+      .pipe(gulp.dest(appDir));
+}
 
+function pageMoveImages(imgDir){
+    gulp.src(pageScaffoldRootImagesDir + '/**/*.*')
+      .pipe(gulp.dest(imgDir));
+}
+
+function pageMoveController(controllerDir){
+    gulp.src(pageScaffoldRootDir + '/controllers/pageController.js')
+      .pipe(gulp.dest(controllerDir));
+}
+
+function pageMoveDependency(dependencyDir){
+    gulp.src(pageScaffoldRootDir + '/dependencies/page.js')
+      .pipe(gulp.dest(dependencyDir));
+}
+
+function pageMoveSharedTemplates(viewsDir){
+    gulp.src(pageScaffoldRootDir + '/views/shared/page/**/*.*')
+      .pipe(gulp.dest(viewsDir));
+}
+
+function pageCreateEmptyTemplate(viewsDir,name){
+    gulp.src(pageScaffoldRootDir + '/view/template.html')
+      .pipe(rename(name.toLowerCase() + '.html'))
+      .pipe(gulp.dest(viewsDir));
+}
 
 // public --------------------------------------------------------------------------------------------------------------
 
@@ -533,6 +608,15 @@ module.exports=function Tasks(config){
     };
     this.webCreateComponent=function(config,params){
         tasks.webCreateComponent(config,params);
+    };
+    this.pageScaffold=function(config){
+        tasks.pageScaffold(config);
+    };
+    this.pagePartialScaffold=function(config){
+        tasks.pagePartialScaffold(config);
+    };
+    this.pageCreateTemplate=function(config,params){
+        tasks.pageCreateTemplate(config,params);
     };
 };
 

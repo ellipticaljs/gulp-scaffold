@@ -1,0 +1,10 @@
+<div>
+  {#content}
+    <content-header data-id="title" data-property="title" content-component>{title}</content-header>
+    <div>
+      <content-editor data-id="body" data-property="body" content-component>
+        {body|s}
+      </content-editor>
+    </div>
+  {/content}
+</div>

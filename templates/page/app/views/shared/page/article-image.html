@@ -1,0 +1,11 @@
+<div class="article-image-content">
+    {#content}
+      <content-header data-id="title" data-property="title" content-component>{title}</content-header>
+      <div class="article-image-container {cssClass}">
+        <content-image data-id="image" data-property="image" content-component file="{image|js}"></content-image>
+        <content-editor data-id="body" data-property="body" content-component>
+            {body|s}
+        </content-editor>
+      </div>
+    {/content}
+</div>
