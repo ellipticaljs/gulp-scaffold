@@ -7,8 +7,8 @@ var PageService=elliptical.PageService;
 var PageTemplate=elliptical.PageTemplate;
 var FileService=elliptical.FileService;
 
-container.mapType('Page', PageService, new elliptical.PageLocalProvider(3));
-container.mapType('PageCategory', PageCategoryService, new elliptical.PageCategoryLocalProvider(6));
+container.mapType('Page', PageService, new elliptical.PageLocalProvider(1));
+container.mapType('PageCategory', PageCategoryService, new elliptical.PageCategoryLocalProvider(1));
 container.mapType('File', FileService, new elliptical.FileLocalProvider());
 container.registerType('PageTemplate', new elliptical.PageTemplate());
 
