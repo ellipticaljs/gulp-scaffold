@@ -609,8 +609,8 @@ module.exports=function Tasks(config){
     this.webCreateComponent=function(config,params){
         tasks.webCreateComponent(config,params);
     };
-    this.pageScaffold=function(config){
-        tasks.pageScaffold(config);
+    this.pageScaffold=function(config,params){
+        tasks.pageScaffold(config,params);
     };
     this.pagePartialScaffold=function(config){
         tasks.pagePartialScaffold(config);
