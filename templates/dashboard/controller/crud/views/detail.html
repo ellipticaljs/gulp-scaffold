@@ -1,4 +1,4 @@
-<section class="full-white">
+<section class="fill-white">
     <md-bar>
         <side-panel>
 
@@ -11,18 +11,18 @@
         <side-panel class="border-right" label="$Class$" service="$Class$" ea-bind="detail">
             <nav-list>
                 <menu-item>
-                    <span class="icon-$icon$ header primary accent"></span>
+                    <iron-icon icon="$icon$" class="header-icon"></iron-icon>
                     <span></span>
                 </menu-item>
                 {#entity}
                     <menu-item action="delete" data-id="{id}">
-                        <span class="icon-delete main icon"></span>
+                        <iron-icon icon="delete" class="main icon"></iron-icon>
                         <span>Delete</span>
                     </menu-item>
                 {/entity}
                 <menu-item>
                     <a href="/$Class$/List/1" class="flex-box align-center">
-                        <span class="icon-search main icon"></span>
+                        <iron-icon icon="search" class="main icon"></iron-icon>
                         <span class="hide-span-medium-down">$ClassPlural$</span>
                     </a>
                 </menu-item>
