@@ -2,7 +2,7 @@ import container from '../dependencies/container';
 var DELAY = 1000;
 var MESSAGE='Loading...';
 var DURATION=100000;
-var $Notify=container.getType('$Notify');
+var Notify=container.getType('Notify');
 
 class Progress{
     constructor(){
@@ -17,7 +17,7 @@ class Progress{
         setTimeout(function(){
             if(self.active){
                 self.showing=true;
-                $Notify.show(MESSAGE,DURATION);
+                Notify.show(MESSAGE,DURATION);
             }
 
         },DELAY);
@@ -26,7 +26,7 @@ class Progress{
     end(){
         this.active=false;
         if(this.showing){
-            $Notify.hide();
+            Notify.hide();
             this.showing=false;
         }
     }
